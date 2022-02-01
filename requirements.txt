@@ -31,5 +31,3 @@ sip==6.1.1
 SQLAlchemy==1.4.25
 sqlparse==0.4.2
 toml==0.10.2
-
-снова воды
