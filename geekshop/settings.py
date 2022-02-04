@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import social_core.backends.github
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "authnapp",
     "basketapp",
     "adminapp",
-    "social_django"
+    "social_django",
 ]
 
 # Auth model
