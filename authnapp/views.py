@@ -1,3 +1,4 @@
+import django.contrib.auth.backends
 from django.conf import settings
 from django.contrib import auth
 from django.core.mail import send_mail
@@ -94,7 +95,7 @@ def verify(request, email, activation_key):
             print(f"user {user} is activated")
             user.is_active = True
             user.save()
-            auth.login(request, user)
+            auth.login(request, user,backend="django.contrib.auth.backends.ModelBackend")
 
             return render(request, "authnapp/verification.html")
         print(f"error activation user: {user}")

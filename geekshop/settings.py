@@ -14,8 +14,6 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -76,8 +74,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "mainapp.context_processors.basket",
-                "social_django_context_processors.backends",
-                "social_django_context_processors.login_redirect",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -185,8 +183,11 @@ AUTHENTICATION_BACKENDS = (
 )
 
 import json
-with open(os.path.join(BASE_DIR,"tmp","secrets","github.json"),"r") as secrets:
-    github_auth=json.load(secrets)
 
-SOCIAL_AUTH_GITHUB_KEY=github_auth["client_id"]
-SOCIAL_AUTH_GITHUB_SECTRET = github_auth["client_secret"]
+with open(
+    os.path.join(BASE_DIR, "tmp", "secrets", "github.json"), "r"
+) as secrets:
+    github_auth = json.load(secrets)
+
+SOCIAL_AUTH_GITHUB_KEY = github_auth["client_id"]
+SOCIAL_AUTH_GITHUB_SECRET = github_auth["client_secret"]
