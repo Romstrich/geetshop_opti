@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import social_core.backends.github
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     "authnapp",
     "basketapp",
     "adminapp",
+    "social_django"
 ]
 
 # Auth model
@@ -73,6 +76,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "mainapp.context_processors.basket",
+                "social_django_context_processors.backends",
+                "social_django_context_processors.login_redirect",
             ],
         },
     },
@@ -173,3 +178,15 @@ EMAIL_HOST_PASSWORD = None
 # Email as files
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "tmp/email-messages/"
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.github.GithubOAuth2",
+)
+
+import json
+with open(os.path.join(BASE_DIR,"tmp","secrets","gihub.json"),"r") as secrets:
+    github_auth=json.load(secrets)
+
+SOCIAL_AUTH_GITHUB_KEY=github_auth["client_id"]
+SOCIAL_AUTH_GITHUB_SECTRET = github_auth["client_secret"]
