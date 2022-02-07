@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import django.template.context_processors
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     "basketapp",
     "adminapp",
     "social_django",
+    "ordersapp",
 ]
 
 # Auth model
@@ -58,7 +61,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
+
+    ]
 
 ROOT_URLCONF = "geekshop.urls"
 
@@ -76,6 +80,7 @@ TEMPLATES = [
                 "mainapp.context_processors.basket",
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
+                "django.template.context_processors.media",
             ],
         },
     },
