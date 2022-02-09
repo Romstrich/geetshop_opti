@@ -2,7 +2,19 @@ from django.db import models
 
 # Create your models here.
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+
 from mainapp.models import Product
+
+
+#Свой QuerySet
+class OrderItemQuerySet(models.QuerySet):
+    def delete(self,*args,**kwargs):
+        for object in self:
+            object.product.quantity+=object.quantity
+            object.product.save()
+        super(OrderItemQuerySet,self).delete(*args,**kwargs)
+#Свой QuerySet
 
 class Order(models.Model):
     FORMING = "FM"
@@ -60,5 +72,28 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, verbose_name="продукт", on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name="количество", default=0)
 
+    objects = OrderItemQuerySet.as_manager()
+
     def get_product_cost(self):
         return self.product.price * self.quantity
+
+    @staticmethod
+    def get_item(pk):
+        return get_object_or_404(OrderItem, pk=pk)
+
+#Построим переопределение методов
+    def save(self,*args,**kwargs):
+        if self.pk:
+            self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
+        else:
+            self.product.quantity -= self.quantity
+
+        self.product.save()
+        super(self.__class__,self).save(*args,**kwargs)
+
+    def delete(self,*args,**kwargs):
+        self.product.quantity += self.quantity
+        self.product.save()
+        super(self.__class__,self).delete()
+#Построим переопределение методов
+
