@@ -63,6 +63,8 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+db резерв.sqlite3
+db новый резерв.sqlite3
 
 # Flask stuff:
 instance/
@@ -248,6 +250,6 @@ fabric.properties
 
 # geekshop --->
 
-tmp
+tmp/
 
 # <--- geekshop
