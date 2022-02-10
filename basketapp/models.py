@@ -6,12 +6,12 @@ from mainapp.models import Product
 
 
 #Свой QuerySet
-class BasketQuerySet(models.QuerySet):
-    def delete(self,*args,**kwargs):
-        for object in self:
-            object.product.quantity+=object.quantity
-            object.product.save()
-        super(BasketQuerySet,self).delete(*args,**kwargs)
+# class BasketQuerySet(models.QuerySet):
+#     def delete(self,*args,**kwargs):
+#         for object in self:
+#             object.product.quantity+=object.quantity
+#             object.product.save()
+#         super(BasketQuerySet,self).delete(*args,**kwargs)
 #Свой QuerySet
 
 class Basket(models.Model):
@@ -20,7 +20,7 @@ class Basket(models.Model):
     quantity = models.PositiveIntegerField(verbose_name="количество", default=0)
     add_datetime = models.DateTimeField(verbose_name="время добавления", auto_now_add=True)
 
-    objects = BasketQuerySet.as_manager()
+    # objects = BasketQuerySet.as_manager()
 
     @property
     def product_cost(self):
@@ -50,17 +50,17 @@ class Basket(models.Model):
         return get_object_or_404(Basket, pk=pk)
 
     # Построим переопределение методов
-    def save(self, *args, **kwargs):
-        if self.pk:
-            self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
-        else:
-            self.product.quantity -= self.quantity
-
-        self.product.save()
-        super(self.__class__, self).save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        self.product.quantity += self.quantity
-        self.product.save()
-        super(self.__class__, self).delete()
+    # def save(self, *args, **kwargs):
+    #     if self.pk:
+    #         self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
+    #     else:
+    #         self.product.quantity -= self.quantity
+    #
+    #     self.product.save()
+    #     super(self.__class__, self).save(*args, **kwargs)
+    #
+    # def delete(self, *args, **kwargs):
+    #     self.product.quantity += self.quantity
+    #     self.product.save()
+    #     super(self.__class__, self).delete()
 # Построим переопределение методов
