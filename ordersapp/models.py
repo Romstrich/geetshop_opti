@@ -82,18 +82,18 @@ class OrderItem(models.Model):
         return get_object_or_404(OrderItem, pk=pk)
 
 #Построим переопределение методов
-    def save(self,*args,**kwargs):
-        if self.pk:
-            self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
-        else:
-            self.product.quantity -= self.quantity
-
-        self.product.save()
-        super(self.__class__,self).save(*args,**kwargs)
-
-    def delete(self,*args,**kwargs):
-        self.product.quantity += self.quantity
-        self.product.save()
-        super(self.__class__,self).delete()
+    # def save(self,*args,**kwargs):
+    #     if self.pk:
+    #         self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
+    #     else:
+    #         self.product.quantity -= self.quantity
+    #
+    #     self.product.save()
+    #     super(self.__class__,self).save(*args,**kwargs)
+    #
+    # def delete(self,*args,**kwargs):
+    #     self.product.quantity += self.quantity
+    #     self.product.save()
+    #     super(self.__class__,self).delete()
 #Построим переопределение методов
 
