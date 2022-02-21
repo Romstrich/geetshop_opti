@@ -1,20 +1,9 @@
-from django.db import models
-
-# Create your models here.
 from django.conf import settings
+from django.db import models
 from django.shortcuts import get_object_or_404
 
 from mainapp.models import Product
 
-
-#Свой QuerySet
-# class OrderItemQuerySet(models.QuerySet):
-#     def delete(self,*args,**kwargs):
-#         for object in self:
-#             object.product.quantity+=object.quantity
-#             object.product.save()
-#         super(OrderItemQuerySet,self).delete(*args,**kwargs)
-#Свой QuerySet
 
 class Order(models.Model):
     FORMING = "FM"
@@ -32,12 +21,11 @@ class Order(models.Model):
         (READY, "готов к выдаче"),
         (CANCEL, "отменен"),
     )
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created = models.DateTimeField(verbose_name="создан", auto_now_add=True)
     updated = models.DateTimeField(verbose_name="обновлен", auto_now=True)
     status = models.CharField(verbose_name="статус", max_length=3, choices=ORDER_STATUS_CHOICES, default=FORMING)
-    is_active = models.BooleanField(verbose_name="активен", default=True)
+    is_active = models.BooleanField(verbose_name="активен", default=True, db_index=True)
 
     class Meta:
         ordering = ("-created",)
@@ -67,12 +55,11 @@ class Order(models.Model):
         self.is_active = False
         self.save()
 
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name="orderitems", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name="продукт", on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name="количество", default=0)
-
-    # objects = OrderItemQuerySet.as_manager()
 
     def get_product_cost(self):
         return self.product.price * self.quantity
@@ -80,20 +67,3 @@ class OrderItem(models.Model):
     @staticmethod
     def get_item(pk):
         return get_object_or_404(OrderItem, pk=pk)
-
-#Построим переопределение методов
-    # def save(self,*args,**kwargs):
-    #     if self.pk:
-    #         self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
-    #     else:
-    #         self.product.quantity -= self.quantity
-    #
-    #     self.product.save()
-    #     super(self.__class__,self).save(*args,**kwargs)
-    #
-    # def delete(self,*args,**kwargs):
-    #     self.product.quantity += self.quantity
-    #     self.product.save()
-    #     super(self.__class__,self).delete()
-#Построим переопределение методов
-
